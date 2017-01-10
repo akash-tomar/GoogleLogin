@@ -2,6 +2,7 @@ package com.iot.hmb.googlesignin;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -14,7 +15,7 @@ import android.widget.TextView;
 
 import com.google.android.gms.auth.GoogleAuthException;
 import com.google.android.gms.auth.GoogleAuthUtil;
-import com.google.android.gms.auth.GooglePlayServicesAvailabilityException;
+import com.google.android.gms.auth.UserRecoverableAuthException;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
@@ -42,6 +43,35 @@ public class MainActivity extends AppCompatActivity implements
     private LinearLayout llProfileLayout;
     private ImageView imgProfilePic;
     private TextView txtName, txtEmail;
+
+    private static final int REQ_SIGN_IN_REQUIRED = 55664;
+
+    private class RetrieveTokenTask extends AsyncTask<String, Void, String> {
+
+        @Override
+        protected String doInBackground(String... params) {
+            String accountName = params[0];
+
+            String scopes ="oauth2:profile email https://www.googleapis.com/auth/gmail.readonly https://www.googleapis.com/auth/calendar";
+            String token = null;
+            try {
+                token = GoogleAuthUtil.getToken(getApplicationContext(), accountName, scopes);
+            } catch (IOException e) {
+                Log.e(TAG, e.getMessage());
+            } catch (UserRecoverableAuthException e) {
+                startActivityForResult(e.getIntent(), REQ_SIGN_IN_REQUIRED);
+            } catch (GoogleAuthException e) {
+                Log.e(TAG, e.getMessage());
+            }
+            return token;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            Log.d("google app",s);
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -107,19 +137,7 @@ public class MainActivity extends AppCompatActivity implements
             if (result.isSuccess()) {
                 Log.d("google app", "login successful");
 
-                String token="";
-                try {
-                    String scopes = "oauth2:profile email";
-                    token = GoogleAuthUtil.getToken(MainActivity.this, "taylor.ross217@gmail.com", scopes);
-                } catch (GooglePlayServicesAvailabilityException playEx) {
-                    Log.d("google app","catch");
-                    // Use the dialog to present to the user.
-                } catch (GoogleAuthException authEx) {
-                    // This is likely unrecoverable.
-                } catch (IOException ioEx) {
-                    Log.i(TAG, "transient error encountered: " + ioEx.getMessage());
-                }
-                Log.d("google app",token);
+               new RetrieveTokenTask().execute("taylor.ross217@gmail.com");
 
 
                 // Signed in successfully, show authenticated UI.
