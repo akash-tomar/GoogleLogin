@@ -1,0 +1,87 @@
+{
+  "project_info": {
+    "project_number": "634019099374",
+    "project_id": "handy-curve-144605"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:634019099374:android:5000c847cd7fa0bb",
+        "android_client_info": {
+          "package_name": "com.iot.hmb"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "634019099374-jnpstuhvkmh6vbeb2dass1qnasv8ihkn.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.iot.hmb",
+            "certificate_hash": "20E8418176F561895108E86C7D7E46B85D124A40"
+          }
+        },
+        {
+          "client_id": "634019099374-l1qce04u8s0l95db6doisgq42ajh16n0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyACQLTW-O9BVpVIke6gFu2ph6VTh_0rciQ"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 1
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:634019099374:android:14d31099b7f16c41",
+        "android_client_info": {
+          "package_name": "com.iot.hmb.googlesignin"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "634019099374-pf2vck5elp617p6aab4k498tnja61cq4.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.iot.hmb.googlesignin",
+            "certificate_hash": "20E8418176F561895108E86C7D7E46B85D124A40"
+          }
+        },
+        {
+          "client_id": "634019099374-l1qce04u8s0l95db6doisgq42ajh16n0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyACQLTW-O9BVpVIke6gFu2ph6VTh_0rciQ"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 1
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
