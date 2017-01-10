@@ -9,14 +9,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import com.google.android.gms.auth.GoogleAuthException;
 import com.google.android.gms.auth.GoogleAuthUtil;
 import com.google.android.gms.auth.UserRecoverableAuthException;
 import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
@@ -39,10 +37,7 @@ public class MainActivity extends AppCompatActivity implements
     private ProgressDialog mProgressDialog;
 
     private SignInButton btnSignIn;
-    private Button btnSignOut, btnRevokeAccess;
-    private LinearLayout llProfileLayout;
-    private ImageView imgProfilePic;
-    private TextView txtName, txtEmail;
+    private Button btnSignOut;
 
     private static final int REQ_SIGN_IN_REQUIRED = 55664;
 
@@ -70,6 +65,7 @@ public class MainActivity extends AppCompatActivity implements
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
             Log.d("google app",s);
+            signOut();
         }
     }
 
@@ -80,15 +76,9 @@ public class MainActivity extends AppCompatActivity implements
 
         btnSignIn = (SignInButton) findViewById(R.id.btn_sign_in);
         btnSignOut = (Button) findViewById(R.id.btn_sign_out);
-        btnRevokeAccess = (Button) findViewById(R.id.btn_revoke_access);
-        llProfileLayout = (LinearLayout) findViewById(R.id.llProfile);
-        imgProfilePic = (ImageView) findViewById(R.id.imgProfilePic);
-        txtName = (TextView) findViewById(R.id.txtName);
-        txtEmail = (TextView) findViewById(R.id.txtEmail);
 
         btnSignIn.setOnClickListener(this);
         btnSignOut.setOnClickListener(this);
-        btnRevokeAccess.setOnClickListener(this);
 
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail()
@@ -116,54 +106,25 @@ public class MainActivity extends AppCompatActivity implements
                 new ResultCallback<Status>() {
                     @Override
                     public void onResult(Status status) {
-                        updateUI(false);
+                        Log.d("google app","logged out successfully");
                     }
                 });
     }
 
-    private void revokeAccess() {
-        Auth.GoogleSignInApi.revokeAccess(mGoogleApiClient).setResultCallback(
-                new ResultCallback<Status>() {
-                    @Override
-                    public void onResult(Status status) {
-                        updateUI(false);
-                    }
-                });
-    }
+
 
     private void handleSignInResult(GoogleSignInResult result) {
         Log.d(TAG, "handleSignInResult:" + result.isSuccess());
 
             if (result.isSuccess()) {
                 Log.d("google app", "login successful");
-
-               new RetrieveTokenTask().execute("taylor.ross217@gmail.com");
-
-
-                // Signed in successfully, show authenticated UI.
-                //            GoogleSignInAccount acct = result.getSignInAccount();
-                //
-                //            Log.e(TAG, "display name: " + acct.getDisplayName());
-                //
-                //            String personName = acct.getDisplayName();
-                //            String personPhotoUrl = acct.getPhotoUrl().toString();
-                //            String email = acct.getEmail();
-                //
-                //            Log.e(TAG, "Name: " + personName + ", email: " + email
-                //                    + ", Image: " + personPhotoUrl);
-                //
-                //            txtName.setText(personName);
-                //            txtEmail.setText(email);
-                //            Glide.with(getApplicationContext()).load(personPhotoUrl)
-                //                    .thumbnail(0.5f)
-                //                    .crossFade()
-                //                    .diskCacheStrategy(DiskCacheStrategy.ALL)
-                //                    .into(imgProfilePic);
-
-                updateUI(true);
+                String account_name="test";
+                GoogleSignInAccount acct = result.getSignInAccount();
+                account_name = acct.getEmail();
+                Log.d("google app",account_name);
+                new RetrieveTokenTask().execute(account_name);
             } else {
                 // Signed out, show unauthenticated UI.
-                updateUI(false);
             }
 
     }
@@ -179,10 +140,6 @@ public class MainActivity extends AppCompatActivity implements
 
             case R.id.btn_sign_out:
                 signOut();
-                break;
-
-            case R.id.btn_revoke_access:
-                revokeAccess();
                 break;
         }
     }
@@ -244,20 +201,6 @@ public class MainActivity extends AppCompatActivity implements
     private void hideProgressDialog() {
         if (mProgressDialog != null && mProgressDialog.isShowing()) {
             mProgressDialog.hide();
-        }
-    }
-
-    private void updateUI(boolean isSignedIn) {
-        if (isSignedIn) {
-            btnSignIn.setVisibility(View.GONE);
-            btnSignOut.setVisibility(View.VISIBLE);
-            btnRevokeAccess.setVisibility(View.VISIBLE);
-            llProfileLayout.setVisibility(View.VISIBLE);
-        } else {
-            btnSignIn.setVisibility(View.VISIBLE);
-            btnSignOut.setVisibility(View.GONE);
-            btnRevokeAccess.setVisibility(View.GONE);
-            llProfileLayout.setVisibility(View.GONE);
         }
     }
 }
