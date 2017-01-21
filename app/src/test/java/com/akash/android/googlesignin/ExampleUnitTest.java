@@ -1,4 +1,4 @@
-package com.iot.hmb.googlesignin;
+package com.akash.android.googlesignin;
 
 import org.junit.Test;
 
